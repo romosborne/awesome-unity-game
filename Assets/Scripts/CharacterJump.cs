@@ -24,7 +24,7 @@ public class CharacterJump : MonoBehaviour
 
 
   [SerializeField, Range(0.2f, 1.25f)][Tooltip("How long it takes to reach that height before coming back down")] public float timeToJumpApex;
-  [SerializeField, Range(0f, 5f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 1f;
+  [SerializeField, Range(0f, 5f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 0f;
   [SerializeField, Range(1f, 100f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
   [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
 
@@ -33,7 +33,7 @@ public class CharacterJump : MonoBehaviour
   [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier when you let go of jump")] public float jumpCutOff;
   [SerializeField][Tooltip("The fastest speed the character can fall")] public float speedLimit;
   [SerializeField, Range(0f, 0.3f)][Tooltip("How long should coyote time last?")] public float coyoteTime = 0.15f;
-  [SerializeField, Range(0f, 0.3f)][Tooltip("How far from ground should we cache your jump?")] public float jumpBuffer = 0.15f;
+  [SerializeField, Range(0f, 0.3f)][Tooltip("How far from ground should we cache your jump?")] public float jumpBuffer = 0.015f;
 
   [Header("Calculations")]
   public float jumpSpeed;
@@ -136,6 +136,7 @@ public class CharacterJump : MonoBehaviour
     //Keep trying to do a jump, for as long as desiredJump is true
     if (desiredJump)
     {
+            gravMultiplier = upwardMovementMultiplier;
       DoAJump();
       body.velocity = velocity;
 

@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 public enum PowerUpType
 {
   Jump,
+  WallJump,
   Finish
 }
 
@@ -19,16 +20,26 @@ class PowerUp : MonoBehaviour
   {
     if (collider.gameObject.name != "Player") return;
 
+        var limiter = collider.gameObject.GetComponent<MovementLimiter>();
+
     switch (this.Type)
     {
       case PowerUpType.Jump:
-        var limiter = collider.gameObject.GetComponent<MovementLimiter>();
         limiter.CanJump = true;
         if (CutScene != null)
         {
           CutScene.GetComponent<PlayableDirector>().Play();
         }
         Destroy(this.gameObject);
+        break;
+      case PowerUpType.WallJump:
+        limiter.CanWallJump = true;
+        if (CutScene != null)
+        {
+          CutScene.GetComponent<PlayableDirector>().Play();
+        }
+        Destroy(this.gameObject);
+
         break;
       case PowerUpType.Finish:
         break;

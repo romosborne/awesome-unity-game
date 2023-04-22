@@ -6,6 +6,8 @@ public class MovementLimiter : MonoBehaviour
 
   [SerializeField]
   public bool CanJump = true;
+  [SerializeField]
+  public bool CanWallJump = true;
 
   public void AllowMovement()
   {
