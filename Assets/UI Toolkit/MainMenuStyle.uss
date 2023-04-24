@@ -13,4 +13,19 @@
     align-items: auto;
     justify-content: flex-start;
     width: 500px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+.button:focus {
+    border-left-color: rgba(159, 0, 0, 255);
+    border-right-color: rgba(159, 0, 0, 255);
+    border-top-color: rgba(159, 0, 0, 255);
+    border-bottom-color: rgba(159, 0, 0, 255);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
 }
