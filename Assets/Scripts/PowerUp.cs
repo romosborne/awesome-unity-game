@@ -28,6 +28,7 @@ class PowerUp : MonoBehaviour
         limiter.CanJump = true;
         if (CutScene != null)
         {
+          limiter.CanMove = false;
           CutScene.GetComponent<PlayableDirector>().Play();
         }
         Destroy(this.gameObject);
