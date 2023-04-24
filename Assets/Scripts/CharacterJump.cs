@@ -16,6 +16,11 @@ public class CharacterJump : MonoBehaviour
   [Header("Jumping Stats")]
   [SerializeField, Range(2f, 5.5f)][Tooltip("Maximum jump height")] public float jumpHeight = 7.3f;
 
+  [SerializeField] public float jumpUpGravity = 1f;
+
+  [SerializeField] public float normalGravity = 6.17f;
+  [SerializeField] public float fallingGravity = 60f;
+
 
   //If you're using your stats from Platformer Toolkit with this character controller, please note that the number on the Jump Duration handle does not match this stat
   //It is re-scaled, from 0.2f - 1.25f, to 1 - 10.
@@ -24,8 +29,6 @@ public class CharacterJump : MonoBehaviour
 
 
   [SerializeField, Range(0.2f, 1.25f)][Tooltip("How long it takes to reach that height before coming back down")] public float timeToJumpApex;
-  [SerializeField, Range(0f, 5f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 0f;
-  [SerializeField, Range(1f, 100f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
   [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
 
   [Header("Options")]
@@ -37,7 +40,7 @@ public class CharacterJump : MonoBehaviour
 
   [Header("Calculations")]
   public float jumpSpeed;
-  private float defaultGravityScale;
+  private readonly float defaultGravityScale = 1;
   public float gravMultiplier;
 
   [Header("Current State")]
@@ -45,7 +48,7 @@ public class CharacterJump : MonoBehaviour
   private bool desiredJump;
   private float jumpBufferCounter;
   private float coyoteTimeCounter = 0;
-  private bool pressingJump;
+  public bool pressingJump;
   public bool onGround;
   private bool currentlyJumping;
 
@@ -57,7 +60,6 @@ public class CharacterJump : MonoBehaviour
     ground = GetComponent<CharacterGround>();
     juice = GetComponentInChildren<CharacterJuice>();
     moveLimit = GetComponent<MovementLimiter>();
-    defaultGravityScale = 1f;
   }
 
   public void OnJump(InputAction.CallbackContext context)
@@ -136,7 +138,6 @@ public class CharacterJump : MonoBehaviour
     //Keep trying to do a jump, for as long as desiredJump is true
     if (desiredJump)
     {
-            gravMultiplier = upwardMovementMultiplier;
       DoAJump();
       body.velocity = velocity;
 
@@ -151,63 +152,24 @@ public class CharacterJump : MonoBehaviour
   private void calculateGravity()
   {
     //We change the character's gravity based on her Y direction
+    gravMultiplier = normalGravity;
 
     //If Kit is going up...
     if (body.velocity.y > 0.01f)
     {
-      if (onGround)
-      {
-        //Don't change it if Kit is stood on something (such as a moving platform)
-        gravMultiplier = defaultGravityScale;
-      }
-      else
-      {
-        //If we're using variable jump height...)
-        if (variablejumpHeight)
-        {
-          //Apply upward multiplier if player is rising and holding jump
-          if (pressingJump && currentlyJumping)
-          {
-            gravMultiplier = upwardMovementMultiplier;
-          }
-          //But apply a special downward multiplier if the player lets go of jump
-          else
-          {
-            gravMultiplier = jumpCutOff;
-          }
-        }
-        else
-        {
-          gravMultiplier = upwardMovementMultiplier;
-        }
-      }
+      if (pressingJump) gravMultiplier = jumpUpGravity;
+      else gravMultiplier = fallingGravity;
     }
 
-    //Else if going down...
-    else if (body.velocity.y < -0.01f)
+    if (body.velocity.y < -0.01f)
     {
-
-      if (onGround)
-      //Don't change it if Kit is stood on something (such as a moving platform)
-      {
-        gravMultiplier = defaultGravityScale;
-      }
-      else
-      {
-        //Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
-        gravMultiplier = downwardMovementMultiplier;
-      }
-
+      gravMultiplier = fallingGravity;
     }
+
     //Else not moving vertically at all
-    else
+    if (body.velocity.y == 0f && onGround)
     {
-      if (onGround)
-      {
-        currentlyJumping = false;
-      }
-
-      gravMultiplier = defaultGravityScale;
+      currentlyJumping = false;
     }
 
     //Set the character's Rigidbody's velocity
@@ -231,19 +193,8 @@ public class CharacterJump : MonoBehaviour
       //Determine the power of the jump, based on our gravity and stats
       jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * body.gravityScale * jumpHeight);
 
-      //If Kit is moving up or down when she jumps (such as when doing a double jump), change the jumpSpeed;
-      //This will ensure the jump is the exact same strength, no matter your velocity.
-      if (velocity.y > 0f)
-      {
-        jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
-      }
-      else if (velocity.y < 0f)
-      {
-        jumpSpeed += Mathf.Abs(body.velocity.y);
-      }
-
       //Apply the new jumpSpeed to the velocity. It will be sent to the Rigidbody in FixedUpdate;
-      velocity.y += jumpSpeed;
+      velocity.y = jumpSpeed;
       currentlyJumping = true;
 
       if (juice != null)
@@ -265,25 +216,4 @@ public class CharacterJump : MonoBehaviour
     //Used by the springy pad
     body.AddForce(Vector2.up * bounceAmount, ForceMode2D.Impulse);
   }
-
-  /*
-
-  timeToApexStat = scale(1, 10, 0.2f, 2.5f, numberFromPlatformerToolkit)
-
-
-    public float scale(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
-      {
-
-          float OldRange = (OldMax - OldMin);
-          float NewRange = (NewMax - NewMin);
-          float NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
-
-          return (NewValue);
-      }
-
-  */
-
-
-
-
 }

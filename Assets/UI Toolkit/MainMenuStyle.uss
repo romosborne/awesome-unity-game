@@ -8,7 +8,7 @@
     font-size: 24px;
     -unity-text-outline-width: 0;
     letter-spacing: 9px;
-    transition-duration: 1s;
+    transition-duration: 0.2s;
     max-width: 60%;
     align-items: auto;
     justify-content: flex-start;
@@ -20,10 +20,10 @@
 }
 
 .button:focus {
-    border-left-color: rgba(159, 0, 0, 255);
-    border-right-color: rgba(159, 0, 0, 255);
-    border-top-color: rgba(159, 0, 0, 255);
-    border-bottom-color: rgba(159, 0, 0, 255);
+    border-left-color: rgb(159, 0, 0);
+    border-right-color: rgb(159, 0, 0);
+    border-top-color: rgb(159, 0, 0);
+    border-bottom-color: rgb(159, 0, 0);
     border-left-width: 3px;
     border-right-width: 3px;
     border-top-width: 3px;
