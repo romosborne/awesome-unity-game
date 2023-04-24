@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=90b654f2ad8e515aeb01955d020088b6&amp;type=3#MainMenuStyle" />
+    <ui:VisualElement name="Body" style="justify-content: center; flex-grow: 1;">
+        <ui:Label text="Awesome Game!" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; height: 122px; font-size: 48px; -unity-font-style: bold; margin-top: 60px;" />
+        <ui:VisualElement style="flex-shrink: initial; flex-grow: 1; justify-content: center; align-items: center;">
+            <ui:Button text="Start" display-tooltip-when-elided="true" name="StartButton" class="button" />
+            <ui:Button text="Options" display-tooltip-when-elided="true" name="OptionsButton" class="button" />
+            <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" class="button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
